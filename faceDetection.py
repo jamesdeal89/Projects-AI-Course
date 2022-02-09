@@ -6,27 +6,36 @@ import cv2
 trainedData = cv2.CascadeClassifier("haarcascade_frontalface_default.xml")
 
 # image to detect faces in
-img = cv2.imread('test.jpg')
+#img = cv2.imread('test.jpg')
+# or webcam input
+webcam = cv2.VideoCapture(0)
 
-# AI needs the photos to be in greyscale
+# loops to keep getting frames
+while True:
 
-imgGrey = cv2.cvtColor(src=img, code=cv2.COLOR_BGR2GRAY)
+    # reads webcam data
+    ret, frame = webcam.read()
 
-# detects faces and saves the co-ordinates of the face location in the image
-coOrds = trainedData.detectMultiScale(imgGrey)
-print(coOrds)
+    # AI needs the photos to be in greyscale
+    imgGrey = cv2.cvtColor(src=frame, code=cv2.COLOR_BGR2GRAY)
 
-# iterate through and get all faces detected to allow for mutliple detecions
-for face in coOrds:
-    # assign face co-ordinates
-    print(face)
-    (x,y,w,h) = face
-    # draw detection rectangles around the detected faces based on previous output
-    # uses a top left corner co-ordinate and a bottom right co-ordinate
-    cv2.rectangle(img=img, pt1=(x,y), pt2=(x+w,y+h), color=(0,255,0), thickness=2)
+    # detects faces and saves the co-ordinates of the face location in the image
+    coOrds = trainedData.detectMultiScale(imgGrey)
+    #print(coOrds)
 
-# creates a UI windows and displays the image
-cv2.imshow(winname="face detection", mat=img)
+    # iterate through and get all faces detected to allow for mutliple detecions
+    for face in coOrds:
+        # assign face co-ordinates
+        #print(face)
+        (x,y,w,h) = face
+        # draw detection rectangles around the detected faces based on previous output
+        # uses a top left corner co-ordinate and a bottom right co-ordinate
+        cv2.rectangle(img=frame, pt1=(x,y), pt2=(x+w,y+h), color=(0,255,0), thickness=2)
 
-# waits for a pressed key to keep imshow open
-cv2.waitKey()
+    # creates a UI windows and displays the image
+    cv2.imshow(winname="face detection", mat=frame)
+
+
+# ends processes
+webcam.release()
+cv2.destroyAllWindows
