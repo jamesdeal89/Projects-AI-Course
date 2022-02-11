@@ -57,6 +57,11 @@ while True:
     cv2.imshow(winname="faces", mat=frame)
 
 
-# ends processes
+    # stops the program if Q is pressed
+    buttonPress = cv2.waitKey(1)
+    if buttonPress==81 or buttonPress==113:
+        break
+
+
+# ends processes and stops webcam
 webcam.release()
-cv2.destroyAllWindows
